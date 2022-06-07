@@ -1,4 +1,4 @@
-console.log(data);
+// console.log(data);
 
 // class App extends React.Component {
 //     render() {
@@ -23,15 +23,41 @@ class App extends React.Component {
 //     }
 // }
 
+constructor (props) {
+            super(props)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
     //new syntax
     state = {
-        data:data
+        data:data,
+        value:""
     }
+
+    handleChange(event){
+        console.log(event.target.value)
+        this.setState({value: event.target.value})
+      }    
+
+    // handleChange = (event) =>{
+    //     console.log(event.target.value)
+    //     this.state.value = event.target.value
+    //   }
 
     render () {
         return (
             <div>
                 <h1>Big Time Shopping</h1>
+                <form>
+                <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                </form>
+                <ul>
+                {this.state.data.map(data => {
+                    return (
+                    <li>{data.name}  {data.price}</li>)}
+                    )
+                }
+                </ul>
             </div>
     )
     }
