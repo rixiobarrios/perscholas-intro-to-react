@@ -1,17 +1,4 @@
-// console.log(data);
-
-// class App extends React.Component {
-//     render() {
-//         return (
-//             <div>
-//                 <h1>Hi there! </h1>
-//                 <ul>
-//                     {data.map(item => <li>{item.name}</li>)}
-//                 </ul>
-//             </div>
-//         )
-//     }
-// }
+console.table(data);
 
 class App extends React.Component {
 //old syntax
@@ -33,7 +20,8 @@ constructor (props) {
         data: data,
         name: '',
         price: 0,
-        description: 'Describe this item'
+        description: 'Describe this item',
+        isHiring: true
       }
 
     handleChange = (event) =>{
@@ -41,19 +29,31 @@ constructor (props) {
         this.setState({[event.target.id]: event.target.value})
       } 
 
-    // handleChange = (event) =>{
-    //     console.log(event.target.value)
-    //     this.state.value = event.target.value
-    //   }
     handleSubmit = (event) =>{
         event.preventDefault()
-        console.log('you prevented the default');
+        const newItem = {
+          name: this.state.name,
+          price: this.state.price,
+          description: this.state.description
+        }
+        this.setState({
+          data: [ newItem, ...this.state.data],
+          name: '',
+          price: 0,
+          description: 'Describe this item'
+        })
       }
+
+      handleToggleHiring = () => {
+        this.setState({isHiring: !this.state.isHiring})
+      }      
 
     render () {
         return (
             <div>
-                <h1>Big Time Shopping</h1>
+                <h1> Big Time Shopping </h1>
+                {!this.state.isHiring ? <h2>Yes, we are hiring </h2>: <h2>Sorry, try again tomorrow</h2>}
+                <button onClick={this.handleToggleHiring}>Toggle Hiring</button>
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor='name'>Name</label>
                     <input type='text' value={this.state.name} onChange={this.handleChange} id='name' placeholder='name of product' />
