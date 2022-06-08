@@ -26,7 +26,21 @@
 //   }
 // }
 
-class ProductList extends React.Component {
+// CREATE THE SHOPPING LIST COMPONENT TO RECEIVE THE DATA FROM THE CART
+class ShoppingList extends React.Component {
+    render() {
+      const cartItems = this.props.cart.map((element) => {
+        return (
+          <li>
+            {element.name} {element.price}
+          </li>
+        );
+      });
+      return <ul>{cartItems}</ul>;
+    }
+  }
+  
+  class ProductList extends React.Component {
     state = {
       inShoppingCart: false,
     };
@@ -37,9 +51,13 @@ class ProductList extends React.Component {
       });
     };
     render() {
-      console.log(this.state);
+      // console.log(this.props.handleShoppingCart);
       return (
-        <li onClick={this.handleCartToggle}>
+        <li
+          onClick={() => {
+            return this.props.handleShoppingCart(this.props.element);
+          }}
+        >
           {this.props.element.name}{" "}
           {this.state.inShoppingCart ? <span>in Shopping Cart</span> : null}
         </li>
@@ -57,6 +75,7 @@ class ProductList extends React.Component {
       price: 0,
       description: "Describe this item",
       isHiring: true,
+      cart: [],
     };
   
     // CREATE A METHOD TO CHANGE USER INPUT
@@ -78,7 +97,7 @@ class ProductList extends React.Component {
   
       // Add the new item to our data array
       this.setState({
-        data: [newItem, ...this.state.data],
+        data: [newItem, this.state.data],
       });
     };
   
@@ -89,15 +108,26 @@ class ProductList extends React.Component {
       });
     };
   
+    /// Step 1. Create a method in App component that keeps a handle inside Product list component
+    handleShoppingCart = (item) => {
+      this.setState({
+        cart: [item, ...this.state.cart],
+      });
+    };
+  
     render() {
-      // console.table(this.state.data);
       const dataList = this.state.data.map((element) => {
         return (
-          <ul>
+          //
+          <ul className="products">
             {/* <li>
               {element.name} {element.price}
             </li> */}
-            <ProductList element={element} />
+            {/* Step 2. Hook our handle to product list component */}
+            <ProductList
+              element={element}
+              handleShoppingCart={this.handleShoppingCart}
+            />
           </ul>
         );
       });
@@ -142,15 +172,18 @@ class ProductList extends React.Component {
             <br />
             <input type="submit" />
           </form>
-          <div>
+          <div className="preview">
             <h2>Preview our new item</h2>
             <h3>{this.state.name}</h3>
             <h4>{this.state.price}</h4>
             <h5>{this.state.description}</h5>
           </div>
           {dataList}
-          {/* Passing props from App component to ProductList component */}
-          {/* <ProductList data={data} handleCartToggle={this.handleCartToggle} /> */}
+          <div className="cart">
+            <h3> Shopping Cart </h3>
+            <ShoppingList cart={this.state.cart} />
+            <ul></ul>
+          </div>
         </div>
       );
     }
