@@ -6,7 +6,6 @@ import React from "react";
 // 3. CREATE COMPONENT
 class MovieInfo extends React.Component {
   render() {
-    console.log(this.props);
     return (
       <div>
         <h1>Title: {this.props.searchResult.Title}</h1>
